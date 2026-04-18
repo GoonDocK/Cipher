@@ -1,5 +1,5 @@
 package Cipher.simpleTransposition;
-import Cipher.simpleTransposition.Alphabet.AlphabetBuilder;
+import Cipher.Alphabet.AlphabetBuilder;
 import Miscellaneous.Exceptions.emptyField;
 import java.util.*;
 public class simpleTransposition {
@@ -56,18 +56,9 @@ public class simpleTransposition {
         }
         return keyAux.toString();
     }
-    private char[] getMatrixColumns(){
-        int[] pos=new int[getMatrixColumnsCount()];
-        for(int i=0;i<keySize;i++){
-            for(char j: Alpha){
-                if(j==key.charAt(i)){
-                    pos[i]=j;
-                }
-            }
-        }
-        char[] columns=new char[getMatrixColumnsCount()];
-        for(int i=0;i<keySize;i++) columns[i]=key.charAt(i);
-        return columns;
+    public int getMatrixRowsCount(String cipheredText){
+        int row= cipheredText.length()/keySize;
+        return row;
     }
     public String getTextCorrected(){
         String upperCase=this.texto.toUpperCase();
@@ -121,4 +112,43 @@ public class simpleTransposition {
 
         return cifrado.toString();
     }
+    // Again, WTH is this?
+    public String deCrypt(String cipherText, String key){
+
+        int columnas = key.length();
+        int filas = cipherText.length() / columnas;
+
+        char[][] matriz = new char[filas][columnas];
+
+
+        Integer[] orden = new Integer[columnas];
+        for(int i=0;i<columnas;i++){
+            orden[i] = i;
+        }
+
+        Arrays.sort(orden, (a,b) -> Character.compare(key.charAt(a), key.charAt(b)));
+
+        int pos = 0;
+
+
+        for(int k=0;k<columnas;k++){
+
+            int col = orden[k];
+
+            for(int f=0;f<filas;f++){
+                matriz[f][col] = cipherText.charAt(pos++);
+            }
+        }
+
+        StringBuilder resultado = new StringBuilder();
+
+        for(int f=0;f<filas;f++){
+            for(int c=0;c<columnas;c++){
+                resultado.append(matriz[f][c]);
+            }
+        }
+
+        return resultado.toString();
+    }
+
 }

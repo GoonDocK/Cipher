@@ -2,15 +2,18 @@ package GUI;
 import javax.swing.*;
 import AssetsHandler.iconScaller;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
+import Cipher.cesarCipher.cesarPanel;
+import Cipher.playFair.playPanel;
 import Cipher.simpleTransposition.transPanel;
+import GUI.ComponentCreator.NewUIComp;
 import Miscellaneous.Fonts;
 public class Menu extends JFrame {
     private final CardLayout cardLayout;
+    private final NewUIComp newUIComp = new NewUIComp();
     public Menu() {
         super("Cipher");
-        setSize(900, 600);
+        setSize(1200, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
@@ -43,25 +46,36 @@ public class Menu extends JFrame {
 
         centro.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        JButton cifrar = new JButton("Transposición simple");
-        cifrar.setFont(Fonts.SourceSansPro18Bold);
-        cifrar.setForeground(Color.WHITE);
-        cifrar.setBackground(Color.BLACK);
-        cifrar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cifrar.setIcon(iconScaller.scale("/Assets/Spin.png", 32, 32));
-        cifrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                cardLayout.show(centroCard,"transPanel");
-            }
-        });
-        centro.add(cifrar);
+        JButton transCipher= newUIComp.newButton("Transposición simple", "/Assets/Spin.png");
+        transCipher.setAlignmentX(Component.CENTER_ALIGNMENT);
+        transCipher.setMaximumSize(new Dimension(300, 40));
+        transCipher.addActionListener(e ->  {cardLayout.show(centroCard,"transPanel");});
+        centro.add(transCipher);
 
+        centro.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton cesarCipher= newUIComp.newButton("Cifrado de cesar", "/Assets/Cesar.png");
+        cesarCipher.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cesarCipher.setMaximumSize(new Dimension(300, 40));
+        cesarCipher.addActionListener(e -> {cardLayout.show(centroCard,"cesarPanel");});
+        centro.add(cesarCipher);
+
+        centro.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton playCipher= newUIComp.newButton("Cifrado de PlayFair", "/Assets/PlayFair.png");
+        playCipher.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playCipher.setMaximumSize(new Dimension(300, 40));
+        playCipher.addActionListener(e -> {cardLayout.show(centroCard,"playPanel");});
+        centro.add(playCipher);
 
         centroCard.add(centro, "instruc");
         JPanel transPanel = new transPanel(cardLayout);
+        JPanel cesarPanel = new cesarPanel(cardLayout);
+        JPanel playPanel = new playPanel(cardLayout);
 
+        centroCard.add(cesarPanel, "cesarPanel");
         centroCard.add(transPanel, "transPanel");
+        centroCard.add(playPanel, "playPanel");
         add(centroCard, BorderLayout.CENTER);
         add(panel, BorderLayout.NORTH);
 

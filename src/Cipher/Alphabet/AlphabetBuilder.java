@@ -1,4 +1,4 @@
-package Cipher.simpleTransposition.Alphabet;
+package Cipher.Alphabet;
 public class AlphabetBuilder {
     public static char[] build(){
         char[] alphabet=new char[26];
