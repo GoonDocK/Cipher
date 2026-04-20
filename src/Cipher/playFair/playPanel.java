@@ -76,7 +76,7 @@ public class playPanel extends JPanel {
         gbc.gridwidth=1;
 
         JButton cifrar= newUIComp.newButton("Cifrar", "/Assets/Key.png");
-        cifrar.addActionListener(e -> {Cipher.getTextCorrected(textoDescifrado.getText());});
+        cifrar.addActionListener(e -> {Cipher(textoDescifrado,panelIzquierdo,key,textoCifrado);});
         gbc.gridy=6;
         panelDerecho.add(cifrar, gbc);
 
@@ -91,7 +91,7 @@ public class playPanel extends JPanel {
         panelDerecho.add(atras, gbc);
 
         JButton clear= newUIComp.newButton("Limpiar", "/Assets/Clear.png");
-        clear.addActionListener(e -> {clear(textoCifrado,textoDescifrado,panelIzquierdo);});
+        clear.addActionListener(e -> {clear(textoCifrado,textoDescifrado,panelIzquierdo,key);});
         gbc.gridx=1;
         panelDerecho.add(clear, gbc);
 
@@ -121,12 +121,42 @@ public class playPanel extends JPanel {
         PanelIzquiedo.revalidate();
         PanelIzquiedo.repaint();
     }
-    private void clear(JTextArea textoCifrado, JTextArea textoDescifrado, JPanel PanelIzquiedo){
+    private void createCipherMatrix(JPanel PanelIzquiedo){
+        PanelIzquiedo.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        String Matrix=Cipher.getMatrix();
+        JPanel[][] matrix= new JPanel[5][5];
+        int h=0;
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                if(Matrix.charAt(h)!='I'){
+                    matrix[i][j]= newUIComp.matrixComponent(Matrix.charAt(h)+"",60,60);
+                    h++;
+                }else{
+                    matrix[i][j]= newUIComp.matrixComponent("I/J",60,60);
+                    h+=2;
+                }
+                gbc.gridx=j;
+                gbc.gridy=i;
+                PanelIzquiedo.add(matrix[i][j], gbc);
+            }
+        }
+        PanelIzquiedo.revalidate();
+        PanelIzquiedo.repaint();
+    }
+    private void clear(JTextArea textoCifrado, JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key){
         textoCifrado.setText("");
         textoDescifrado.setText("");
         PanelIzquiedo.removeAll();
+        key.setText("");
         createMatrix(PanelIzquiedo);
         PanelIzquiedo.revalidate();
         PanelIzquiedo.repaint();
+    }
+    private void Cipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado){
+        Cipher.setKey(key.getText());
+        Cipher.getTextCorrected(textoDescifrado.getText());
+        createCipherMatrix(PanelIzquiedo);
+        textoCifrado.setText(Cipher.getCipheredText(""));
     }
 }
