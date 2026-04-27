@@ -1,6 +1,7 @@
 package Cipher.playFair;
 import Cipher.Alphabet.AlphabetBuilder;
 import GUI.ComponentCreator.NewUIComp;
+import Miscellaneous.Exceptions.emptyField;
 import Miscellaneous.Fonts;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -81,6 +82,7 @@ public class playPanel extends JPanel {
         panelDerecho.add(cifrar, gbc);
 
         JButton descifrar = newUIComp.newButton("Descifrar", "/Assets/UnKey.png");
+        descifrar.addActionListener(e -> {deCipher(textoDescifrado,panelIzquierdo,key,textoCifrado);});
         gbc.gridx=1;
         panelDerecho.add(descifrar, gbc);
 
@@ -152,10 +154,24 @@ public class playPanel extends JPanel {
         PanelIzquiedo.revalidate();
         PanelIzquiedo.repaint();
     }
+    private void deCipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado){
+        try{
+            Cipher.setKey(key.getText());
+            Cipher.getTextCorrected(textoCifrado.getText());
+            createCipherMatrix(PanelIzquiedo);
+            textoDescifrado.setText(Cipher.getDecryptedText(""));
+        }catch(emptyField e){
+            JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
+        }
+    }
     private void Cipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado){
-        Cipher.setKey(key.getText());
-        Cipher.getTextCorrected(textoDescifrado.getText());
-        createCipherMatrix(PanelIzquiedo);
-        textoCifrado.setText(Cipher.getCipheredText(""));
+        try{
+            Cipher.setKey(key.getText());
+            Cipher.getTextCorrected(textoDescifrado.getText());
+            createCipherMatrix(PanelIzquiedo);
+            textoCifrado.setText(Cipher.getCipheredText(""));
+        }catch(emptyField e){
+            JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
+        }
     }
 }
