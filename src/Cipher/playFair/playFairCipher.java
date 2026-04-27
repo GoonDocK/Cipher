@@ -9,8 +9,12 @@ public class playFairCipher extends Cipher{
     private String text;
     private String cipheredText;
     private final char[][] matrix=new char[5][5];
+    //Position of the first character in the matrix
     int x;
     int y;
+    //Position of the second character in the matrix
+    int w;
+    int z;
     @Override
     public String getTextCorrected(String text) {
         StringBuilder keyAux=new StringBuilder();
@@ -19,6 +23,7 @@ public class playFairCipher extends Cipher{
         }
         this.text=text.toUpperCase();
         for(int i=0;i<this.text.length();i++){
+            if(text.charAt(i)=='J') keyAux.append('I');
             if(text.charAt(i)!=32) keyAux.append(this.text.charAt(i));
         }
         this.text=keyAux.toString();
@@ -27,6 +32,7 @@ public class playFairCipher extends Cipher{
 
     @Override
     public String getCipheredText(String text) {
+        encrypt(check());
         return this.cipheredText;
     }
 
@@ -75,6 +81,7 @@ public class playFairCipher extends Cipher{
             keyList.add(keyAux.toString());
             keyAux.setLength(0);
         }
+        System.out.println(keyList);
         return keyList;
     }
     //creates the characters of the new matrix with keyword in it
@@ -93,12 +100,12 @@ public class playFairCipher extends Cipher{
         boolean isOnKey=false;
         for (char c : Alphabet) {
             for (Character character : newKey) {
-                if (c == character) {
+                if ((c == character)) {
                     isOnKey = true;
                     break;
                 }
             }
-            if (!isOnKey) {
+            if (!isOnKey&&(c!='J')) {
                 newKey.add(c);
             }
             isOnKey = false;
@@ -137,22 +144,58 @@ public class playFairCipher extends Cipher{
     }
     //Methods that return the encrypted text under development
     private String sameRow(String s){
-        return null;
+        char A=matrix[(x+1)% matrix.length][y];
+        char B=matrix[(w+1)% matrix.length][z];
+        return String.valueOf(A) +
+                B;
     }
     private String sameColumn(String s){
-        return null;
+        char A=matrix[x][(y+1)% matrix[x].length];
+        char B=matrix[w][(z+1)% matrix[w].length];
+        return String.valueOf(A) +
+                B;
     }
     private String notInRowOrColumn(String s){
-        return null;
+        char Second=s.charAt(1);
+        char A=0;
+        char B=0;
+        //Finds locations of the character in the matrix
+        for(int j=0;j<5;j++){
+            for(int i=0;i<5;i++){
+                if(matrix[i][j]==Second){
+                    w=i;
+                    z=j;
+                    break;
+                }
+            }
+        }
+        for(int j=0;j<5;j++){
+            for(int i=0;i<5;i++){
+                if(matrix[i][y]==matrix[w][j]){
+                    A=matrix[i][y];
+                    break;
+                }
+            }
+        }
+        for(int j=0;j<5;j++){
+            for(int i=0;i<5;i++){
+                if(matrix[x][i]==matrix[j][z]){
+                    B=matrix[x][i];
+                    break;
+                }
+            }
+        }
+        return String.valueOf(B) +
+                A;
     }
     private int getAnyCase(char first, char second){
-         this.x=0;
-         this.y=0;
         boolean found=false;
-        for(y=0;y<5;y++){
-            for(x=0;x<5;x++){
-                if(matrix[x][y]==first){
+        for(int j=0;j<5;j++){
+            for(int i=0;i<5;i++){
+                if(matrix[i][j]==first){
                     found=true;
+                    this.x=i;
+                    this.y=j;
                     break;
                 }
             }
@@ -163,12 +206,16 @@ public class playFairCipher extends Cipher{
         //Same Row
         for(int i=0;i<5;i++){
             if(matrix[i][y]==second){
+                this.w=i;
+                this.z=y;
                 return 1;
             }
         }
         //Same Column
         for(int i=0;i<5;i++){
             if(matrix[x][i]==second){
+                this.w=x;
+                this.z=i;
                 return 2;
             }
         }

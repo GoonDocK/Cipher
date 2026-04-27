@@ -131,11 +131,10 @@ public class playPanel extends JPanel {
             for(int j=0;j<5;j++){
                 if(Matrix.charAt(h)!='I'){
                     matrix[i][j]= newUIComp.matrixComponent(Matrix.charAt(h)+"",60,60);
-                    h++;
                 }else{
                     matrix[i][j]= newUIComp.matrixComponent("I/J",60,60);
-                    h+=2;
                 }
+                h++;
                 gbc.gridx=j;
                 gbc.gridy=i;
                 PanelIzquiedo.add(matrix[i][j], gbc);
