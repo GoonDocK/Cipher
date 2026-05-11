@@ -160,7 +160,7 @@ public class playPanel extends JPanel {
             Cipher.getTextCorrected(textoCifrado.getText());
             createCipherMatrix(PanelIzquiedo);
             textoDescifrado.setText(Cipher.getDecryptedText(""));
-        }catch(emptyField e){
+        }catch(Exception e){
             JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
         }
     }
@@ -170,7 +170,7 @@ public class playPanel extends JPanel {
             Cipher.getTextCorrected(textoDescifrado.getText());
             createCipherMatrix(PanelIzquiedo);
             textoCifrado.setText(Cipher.getCipheredText(""));
-        }catch(emptyField e){
+        }catch(Exception e){
             JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
         }
     }

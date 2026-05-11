@@ -1,6 +1,7 @@
 package Cipher.playFair;
 import Cipher.Alphabet.AlphabetBuilder;
 import Cipher.Cipher;
+import Miscellaneous.Exceptions.InvalidCharacter;
 import Miscellaneous.Exceptions.emptyField;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,15 @@ public class playFairCipher extends Cipher{
             throw new emptyField("El texto no puede ser estar vacío");
         }
         this.text=text.toUpperCase();
+        text=text.toUpperCase();
         for(int i=0;i<this.text.length();i++){
-            if(text.charAt(i)=='J') keyAux.append('I');
+            if(text.charAt(i)<'A' || text.charAt(i)>'Z'){
+                throw new InvalidCharacter("El texto solo puede contener letras");
+            }
+            if(text.charAt(i)=='J') {
+                keyAux.append('I');
+                continue;
+            }
             if(text.charAt(i)!=32) keyAux.append(this.text.charAt(i));
         }
         this.text=keyAux.toString();
@@ -176,16 +184,15 @@ public class playFairCipher extends Cipher{
                 B;
     }
     private String sameRowDecrypt(String s){
-        char A=matrix[(x-1)% matrix.length][y];
-        char B=matrix[(w-1)% matrix.length][z];
-        return String.valueOf(A) +
-                B;
+        char A = matrix[(x - 1 + matrix.length) % matrix.length][y];
+        char B = matrix[(w - 1 + matrix.length) % matrix.length][z];
+        return String.valueOf(A) + B;
     }
+
     private String sameColumnDecrypt(String s){
-        char A=matrix[x][(y-1)% matrix[x].length];
-        char B=matrix[w][(z-1)% matrix[w].length];
-        return String.valueOf(A) +
-                B;
+        char A = matrix[x][(y - 1 + matrix[x].length) % matrix[x].length];
+        char B = matrix[w][(z - 1 + matrix[w].length) % matrix[w].length];
+        return String.valueOf(A) + B;
     }
     private String notInRowOrColumn(String s){
         char Second=s.charAt(1);

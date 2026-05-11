@@ -3,6 +3,7 @@ import javax.swing.*;
 import AssetsHandler.iconScaller;
 import java.awt.*;
 
+import Cipher.Vernam.VernamPanel;
 import Cipher.cesarCipher.cesarPanel;
 import Cipher.playFair.playPanel;
 import Cipher.simpleTransposition.transPanel;
@@ -68,18 +69,33 @@ public class Menu extends JFrame {
         playCipher.addActionListener(e -> {cardLayout.show(centroCard,"playPanel");});
         centro.add(playCipher);
 
+        centro.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JButton vernamCipher = newUIComp.newButton("Cifrado de Vernam", "/Assets/Vernam.png");
+        vernamCipher.setAlignmentX(Component.CENTER_ALIGNMENT);
+        vernamCipher.addActionListener(e -> {vernamLaunch(centroCard);});
+        vernamCipher.setMaximumSize(new Dimension(300, 40));
+        centro.add(vernamCipher);
+
         centroCard.add(centro, "instruc");
         JPanel transPanel = new transPanel(cardLayout);
         JPanel cesarPanel = new cesarPanel(cardLayout);
         JPanel playPanel = new playPanel(cardLayout);
+        JPanel vernamPanel= new VernamPanel(cardLayout);
 
         centroCard.add(cesarPanel, "cesarPanel");
         centroCard.add(transPanel, "transPanel");
         centroCard.add(playPanel, "playPanel");
+        centroCard.add(vernamPanel, "vernamPanel");
         add(centroCard, BorderLayout.CENTER);
         add(panel, BorderLayout.NORTH);
 
 
         setVisible(true);
+    }
+    private void vernamLaunch(JPanel centroCard){
+        if(JOptionPane.showConfirmDialog(this.getParent(),"Advertencia: El cifrado de Vernam funciona por medio del código de Baudot y encripta en Binario a diferencia del tradicional que funciona en ASCII y encripta en texto, debido a la limitación de caracteres del codigo de Baudot el cifrado sera mostrado en binario")==0){
+            cardLayout.show(centroCard,"vernamPanel");
+        }
     }
 }
