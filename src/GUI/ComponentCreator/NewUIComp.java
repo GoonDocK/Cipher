@@ -24,4 +24,16 @@ public class NewUIComp {
         label.setFont(Fonts.SourceSansPro18Bold);
         return panel;
     }
+    public JPanel matrixComponentIcon(String icon){
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE);
+        JLabel label = new JLabel();
+        label.setIcon(iconScaller.scale(icon, 32, 32));
+        panel.add(label);
+        panel.setPreferredSize(new Dimension(50, 50));
+        panel.setMinimumSize(new Dimension(50, 50));
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+        label.setFont(Fonts.SourceSansPro18Bold);
+        return panel;
+    }
 }

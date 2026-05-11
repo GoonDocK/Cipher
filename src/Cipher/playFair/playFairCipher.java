@@ -1,6 +1,7 @@
 package Cipher.playFair;
 import Cipher.Alphabet.AlphabetBuilder;
 import Cipher.Cipher;
+import Miscellaneous.Exceptions.InvalidCharacter;
 import Miscellaneous.Exceptions.emptyField;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ public class playFairCipher extends Cipher{
     private String key;
     private String text;
     private String cipheredText;
+    private String decipheredText;
     private final char[][] matrix=new char[5][5];
     //Position of the first character in the matrix
     int x;
@@ -19,11 +21,18 @@ public class playFairCipher extends Cipher{
     public String getTextCorrected(String text) {
         StringBuilder keyAux=new StringBuilder();
         if(text.isEmpty()){
-            throw new emptyField("Text is empty");
+            throw new emptyField("El texto no puede ser estar vacío");
         }
         this.text=text.toUpperCase();
+        text=text.toUpperCase();
         for(int i=0;i<this.text.length();i++){
-            if(text.charAt(i)=='J') keyAux.append('I');
+            if(text.charAt(i)<'A' || text.charAt(i)>'Z'){
+                throw new InvalidCharacter("El texto solo puede contener letras");
+            }
+            if(text.charAt(i)=='J') {
+                keyAux.append('I');
+                continue;
+            }
             if(text.charAt(i)!=32) keyAux.append(this.text.charAt(i));
         }
         this.text=keyAux.toString();
@@ -38,11 +47,12 @@ public class playFairCipher extends Cipher{
 
     @Override
     public String getDecryptedText(String text) {
-        return "";
+        decrypt(check());
+        return this.decipheredText;
     }
     public void setKey(String key) throws emptyField{
         if(key.isEmpty()){
-            throw new emptyField("Key is empty");
+            throw new emptyField("La palabra no puede ser ninguna");
         }
         this.key=key.toUpperCase();
     }
@@ -129,10 +139,10 @@ public class playFairCipher extends Cipher{
         for(String s: division){
             switch (getAnyCase(s.charAt(0),s.charAt(1))) {
                 case 1:
-                    cipheredText.append(sameRow(s));
+                    cipheredText.append(sameRowCrypt(s));
                     break;
                 case 2:
-                    cipheredText.append(sameColumn(s));
+                    cipheredText.append(sameColumnCrypt(s));
                     break;
                 case 3:
                     cipheredText.append(notInRowOrColumn(s));
@@ -142,18 +152,47 @@ public class playFairCipher extends Cipher{
         }
         this.cipheredText=cipheredText.toString();
     }
+    private void decrypt(ArrayList<String> division){
+        StringBuilder decipheredText=new StringBuilder();
+        for(String s: division){
+            switch (getAnyCase(s.charAt(0),s.charAt(1))) {
+                case 1:
+                    decipheredText.append(sameRowDecrypt(s));
+                    break;
+                case 2:
+                    decipheredText.append(sameColumnDecrypt(s));
+                    break;
+                case 3:
+                    decipheredText.append(notInRowOrColumn(s));
+                    break;
+                default:
+            }
+        }
+        this.decipheredText=decipheredText.toString();
+    }
     //Methods that return the encrypted text under development
-    private String sameRow(String s){
+    private String sameRowCrypt(String s){
         char A=matrix[(x+1)% matrix.length][y];
         char B=matrix[(w+1)% matrix.length][z];
         return String.valueOf(A) +
                 B;
     }
-    private String sameColumn(String s){
+    private String sameColumnCrypt(String s){
         char A=matrix[x][(y+1)% matrix[x].length];
         char B=matrix[w][(z+1)% matrix[w].length];
         return String.valueOf(A) +
                 B;
+    }
+    private String sameRowDecrypt(String s){
+        char A = matrix[(x - 1 + matrix.length) % matrix.length][y];
+        char B = matrix[(w - 1 + matrix.length) % matrix.length][z];
+        return String.valueOf(A) + B;
+    }
+
+    private String sameColumnDecrypt(String s){
+        char A = matrix[x][(y - 1 + matrix[x].length) % matrix[x].length];
+        char B = matrix[w][(z - 1 + matrix[w].length) % matrix[w].length];
+        return String.valueOf(A) + B;
     }
     private String notInRowOrColumn(String s){
         char Second=s.charAt(1);
