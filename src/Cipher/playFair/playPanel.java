@@ -1,7 +1,6 @@
 package Cipher.playFair;
 import Cipher.Alphabet.AlphabetBuilder;
 import GUI.ComponentCreator.NewUIComp;
-import Miscellaneous.Exceptions.emptyField;
 import Miscellaneous.Fonts;
 import javax.swing.*;
 import javax.swing.border.Border;
