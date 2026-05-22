@@ -1,11 +1,12 @@
 package Cipher.playFair;
 import Cipher.Alphabet.AlphabetBuilder;
 import GUI.ComponentCreator.NewUIComp;
-import Miscellaneous.Exceptions.emptyField;
 import Miscellaneous.Fonts;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.ArrayList;
+
 public class playPanel extends JPanel {
     private final playFairCipher Cipher = new playFairCipher();
     private final NewUIComp newUIComp = new NewUIComp();
@@ -13,6 +14,15 @@ public class playPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         setLayout(new GridLayout(1, 2));
+
+        JPanel alterPanelIzquierdo = new JPanel();
+        alterPanelIzquierdo.setLayout(new BorderLayout());
+
+        JPanel panelInferior = new JPanel();
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+
+
         JPanel panelIzquierdo = new JPanel();
         panelIzquierdo.setLayout(new GridBagLayout());
         panelIzquierdo.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -77,12 +87,12 @@ public class playPanel extends JPanel {
         gbc.gridwidth=1;
 
         JButton cifrar= newUIComp.newButton("Cifrar", "/Assets/Key.png");
-        cifrar.addActionListener(e -> {Cipher(textoDescifrado,panelIzquierdo,key,textoCifrado);});
+        cifrar.addActionListener(e -> {Cipher(textoDescifrado,panelIzquierdo,key,textoCifrado, panelInferior);});
         gbc.gridy=6;
         panelDerecho.add(cifrar, gbc);
 
         JButton descifrar = newUIComp.newButton("Descifrar", "/Assets/UnKey.png");
-        descifrar.addActionListener(e -> {deCipher(textoDescifrado,panelIzquierdo,key,textoCifrado);});
+        descifrar.addActionListener(e -> {deCipher(textoDescifrado,panelIzquierdo,key,textoCifrado, panelInferior );});
         gbc.gridx=1;
         panelDerecho.add(descifrar, gbc);
 
@@ -93,12 +103,12 @@ public class playPanel extends JPanel {
         panelDerecho.add(atras, gbc);
 
         JButton clear= newUIComp.newButton("Limpiar", "/Assets/Clear.png");
-        clear.addActionListener(e -> {clear(textoCifrado,textoDescifrado,panelIzquierdo,key);});
+        clear.addActionListener(e -> {clear(textoCifrado,textoDescifrado,panelIzquierdo,key, panelInferior);});
         gbc.gridx=1;
         panelDerecho.add(clear, gbc);
-
-
-        add(panelIzquierdo,BorderLayout.WEST);
+        alterPanelIzquierdo.add(panelInferior,BorderLayout.SOUTH);
+        alterPanelIzquierdo.add(panelIzquierdo,BorderLayout.CENTER);
+        add(alterPanelIzquierdo,BorderLayout.WEST);
         add(panelDerecho,BorderLayout.EAST);
     }
     private void createMatrix(JPanel PanelIzquiedo){
@@ -145,7 +155,7 @@ public class playPanel extends JPanel {
         PanelIzquiedo.revalidate();
         PanelIzquiedo.repaint();
     }
-    private void clear(JTextArea textoCifrado, JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key){
+    private void clear(JTextArea textoCifrado, JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JPanel panelInferior){
         textoCifrado.setText("");
         textoDescifrado.setText("");
         PanelIzquiedo.removeAll();
@@ -153,25 +163,51 @@ public class playPanel extends JPanel {
         createMatrix(PanelIzquiedo);
         PanelIzquiedo.revalidate();
         PanelIzquiedo.repaint();
+        panelInferior.removeAll();
+        panelInferior.revalidate();
+        panelInferior.repaint();
     }
-    private void deCipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado){
+    private void deCipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado, JPanel panelInferior){
         try{
             Cipher.setKey(key.getText());
             Cipher.getTextCorrected(textoCifrado.getText());
             createCipherMatrix(PanelIzquiedo);
             textoDescifrado.setText(Cipher.getDecryptedText(""));
+            createGroups(panelInferior);
         }catch(Exception e){
             JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
         }
     }
-    private void Cipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado){
+    private void Cipher(JTextArea textoDescifrado, JPanel PanelIzquiedo, JTextField key, JTextArea textoCifrado, JPanel panelInferior){
         try{
             Cipher.setKey(key.getText());
             Cipher.getTextCorrected(textoDescifrado.getText());
             createCipherMatrix(PanelIzquiedo);
             textoCifrado.setText(Cipher.getCipheredText(""));
+            createGroups(panelInferior);
         }catch(Exception e){
             JOptionPane.showMessageDialog(this.getParent(),e.getMessage());
         }
+    }
+    private void createGroups(JPanel panelInferior){
+        panelInferior.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        panelInferior.setLayout(new GridBagLayout());
+        ArrayList<String> division= Cipher.getDivision();
+        int k=0;
+        for (String s : division) {
+            gbc.insets=new Insets(0,0,0,0);
+            for (int j = 0; j < 2; j++) {
+                if(j==1){
+                    gbc.insets=new Insets(0,0,0,10);
+                }
+                JPanel panel = newUIComp.matrixComponent(s.charAt(j) + "", 50, 50);
+                gbc.gridx = k;
+                panelInferior.add(panel, gbc);
+                k++;
+            }
+        }
+        panelInferior.revalidate();
+        panelInferior.repaint();
     }
 }

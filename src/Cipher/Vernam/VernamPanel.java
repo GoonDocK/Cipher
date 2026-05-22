@@ -13,7 +13,7 @@ public class VernamPanel extends JPanel {
         setLayout(new GridLayout(2, 1));
         JPanel upperPanel = new JPanel();
         JScrollPane upperPanelScroll = new JScrollPane(upperPanel);
-        upperPanelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        upperPanelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         upperPanelScroll.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         JPanel lowerPanel = new JPanel();
 

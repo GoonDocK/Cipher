@@ -11,6 +11,7 @@ public class playFairCipher extends Cipher{
     private String cipheredText;
     private String decipheredText;
     private final char[][] matrix=new char[5][5];
+    private ArrayList<String> division;
     //Position of the first character in the matrix
     int x;
     int y;
@@ -91,8 +92,11 @@ public class playFairCipher extends Cipher{
             keyList.add(keyAux.toString());
             keyAux.setLength(0);
         }
-        System.out.println(keyList);
+        this.division=keyList;
         return keyList;
+    }
+    public ArrayList<String> getDivision(){
+        return this.division;
     }
     //creates the characters of the new matrix with keyword in it
     public String getMatrix(){
