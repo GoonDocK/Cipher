@@ -3,6 +3,7 @@ import javax.swing.*;
 import AssetsHandler.iconScaller;
 import java.awt.*;
 import Cipher.EndToEnd.EndToEndPanel;
+import Cipher.RSA.RSAPanel;
 import Cipher.Vernam.VernamPanel;
 import Cipher.cesarCipher.cesarPanel;
 import Cipher.playFair.playPanel;
@@ -14,7 +15,7 @@ public class Menu extends JFrame {
     private final NewUIComp newUIComp = new NewUIComp();
     public Menu() {
         super("Cipher");
-        setSize(1200, 900);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
@@ -41,6 +42,7 @@ public class Menu extends JFrame {
 
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new GridBagLayout());
+        lowerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 
         JLabel instruc = new JLabel("Seleccione la opción de cifrado");
@@ -59,7 +61,7 @@ public class Menu extends JFrame {
 
         centro.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JButton cesarCipher= newUIComp.newButton("Cifrado de cesar", "/Assets/Cesar.png");
+        JButton cesarCipher= newUIComp.newButton("Cifrado de Cesar", "/Assets/Cesar.png");
         cesarCipher.setAlignmentX(Component.CENTER_ALIGNMENT);
         cesarCipher.setMaximumSize(new Dimension(300, 40));
         cesarCipher.addActionListener(e -> {cardLayout.show(centroCard,"cesarPanel");});
@@ -93,26 +95,73 @@ public class Menu extends JFrame {
         centro.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JButton RSA= newUIComp.newButton("Algoritmo RSA", "/Assets/RSA.png");
+        RSA.addActionListener(e -> cardLayout.show(centroCard,"rSAPanel"));
         RSA.setToolTipText("Algoritmo RSA no esta disponible");
         RSA.setForeground(Color.RED);
-        RSA.setEnabled(false);
         RSA.setAlignmentX(Component.CENTER_ALIGNMENT);
         RSA.setMaximumSize(new Dimension(300, 40));
         centro.add(RSA);
 
+        centro.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        JButton credits= newUIComp.newButton("Info", "/Assets/Code.png");
+        credits.setAlignmentX(Component.CENTER_ALIGNMENT);
+        credits.setMaximumSize(new Dimension(300, 40));
+        centro.add(credits);
+
+        centro.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        JButton exit= newUIComp.newButton("Salir", "/Assets/Exit.png");
+        exit.addActionListener(e -> System.exit(0));
+        exit.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exit.setMaximumSize(new Dimension(300, 40));
+        centro.add(exit);
+
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel Help= new JLabel("Ayuda");
+        JLabel Help= new JLabel("Ayuda", SwingConstants.CENTER);
         Help.setToolTipText("Ayuda");
         Help.setFont(Fonts.SourceSansPro18);
         Help.setForeground(Color.BLACK);
         Help.setAlignmentX(Component.CENTER_ALIGNMENT);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1;
         gbc.weighty = 0;
+        gbc.gridwidth=3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 10, 0);
         lowerPanel.add(Help, gbc);
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        gbc.gridwidth=1;
+
+        JButton helpTrans= newUIComp.newButton("", "/Assets/Spin.png");
+        gbc.gridy=1;
+        lowerPanel.add(helpTrans, gbc);
+
+        JButton helpCesar= newUIComp.newButton("", "/Assets/Cesar.png");
+        gbc.gridx=1;
+        lowerPanel.add(helpCesar, gbc);
+
+        JButton helpPlay= newUIComp.newButton("", "/Assets/PlayFair.png");
+        gbc.gridx=2;
+        lowerPanel.add(helpPlay, gbc);
+
+        gbc.gridx=0;
+
+        JButton helpVernam= newUIComp.newButton("", "/Assets/Vernam.png");
+        gbc.gridy=2;
+        lowerPanel.add(helpVernam, gbc);
+
+        JButton helpEndtoend= newUIComp.newButton("", "/Assets/Afin.png");
+        gbc.gridx=1;
+        lowerPanel.add(helpEndtoend, gbc);
+
+        JButton helpRSA= newUIComp.newButton("", "/Assets/RSA.png");
+        gbc.gridx=2;
+        lowerPanel.add(helpRSA, gbc);
+
+
 
         centroCard.add(centro, "instruc");
         JPanel transPanel = new transPanel(cardLayout);
@@ -120,14 +169,17 @@ public class Menu extends JFrame {
         JPanel playPanel = new playPanel(cardLayout);
         JPanel vernamPanel= new VernamPanel(cardLayout);
         JPanel endtoendPanel= new EndToEndPanel(cardLayout);
+        JPanel rSAPanel= new RSAPanel(cardLayout);
 
         centroCard.add(cesarPanel, "cesarPanel");
         centroCard.add(transPanel, "transPanel");
         centroCard.add(playPanel, "playPanel");
         centroCard.add(vernamPanel, "vernamPanel");
         centroCard.add(endtoendPanel, "endtoendPanel");
+        centroCard.add(rSAPanel, "rSAPanel");
         add(centroCard, BorderLayout.CENTER);
         add(panel, BorderLayout.NORTH);
+        add(lowerPanel, BorderLayout.SOUTH);
 
 
         setVisible(true);
