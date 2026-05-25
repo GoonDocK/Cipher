@@ -134,7 +134,11 @@ public class EndToEndPanel extends JPanel {
             lowerPanel.revalidate();
             lowerPanel.repaint();
         }catch(Exception e){
-            JOptionPane.showMessageDialog(this.getParent(),e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            if(e instanceof ArrayIndexOutOfBoundsException){
+                JOptionPane.showMessageDialog(this.getParent(),"Modulo de la cifra demasiado grande","Error",JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this.getParent(),e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     private void clear(JTextArea cipheredText, JTextArea decryptedText, JTextField a, JTextField b, JTextField n, JPanel lowerPanel){
@@ -156,7 +160,11 @@ public class EndToEndPanel extends JPanel {
             lowerPanel.revalidate();
             lowerPanel.repaint();
         }catch(Exception e){
-            JOptionPane.showMessageDialog(this.getParent(),e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            if(e instanceof ArrayIndexOutOfBoundsException){
+                JOptionPane.showMessageDialog(this.getParent(),"Modulo de la cifra demasiado grande","Error",JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this.getParent(),e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     private void cipheredMatrix(JTextArea cipheredText, JTextArea decryptedText, JPanel lowerPanel, Boolean Decryption){

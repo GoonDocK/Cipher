@@ -28,6 +28,7 @@ public class playFairCipher extends Cipher{
         text=text.toUpperCase();
         for(int i=0;i<this.text.length();i++){
             if(text.charAt(i)<'A' || text.charAt(i)>'Z'){
+                if(text.charAt(i)==32) continue;
                 throw new InvalidCharacter("El texto solo puede contener letras");
             }
             if(text.charAt(i)=='J') {
