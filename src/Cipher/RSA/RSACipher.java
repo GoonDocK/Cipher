@@ -76,6 +76,7 @@ public class RSACipher {
         }
         return factors;
     }
+
     private long nextFactor(long previousFactor){
         long nextFactor=previousFactor+1;
         while(!checkPrimes(nextFactor)){
@@ -83,6 +84,7 @@ public class RSACipher {
         }
         return nextFactor;
     }
+
     private long fastExponentiation(long base, long exponent, long modulus){
         ArrayList<Integer> binaryBase=toBinary(exponent);
         long X=1;
@@ -95,6 +97,7 @@ public class RSACipher {
         }
         return X;
     }
+
     private ArrayList<Integer> toBinary(long number){
         ArrayList<Integer> binary=new ArrayList<>();
        while(!(number<2)){
@@ -109,6 +112,7 @@ public class RSACipher {
        Collections.reverse(binary);
        return binary;
     }
+
     public void encrypt(){
         calculateExponent();
         S=fastExponentiation(this.N,this.exponent,this.phi);

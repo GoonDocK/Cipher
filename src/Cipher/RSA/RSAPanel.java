@@ -121,7 +121,7 @@ public class RSAPanel extends JPanel {
         add(button, gbc);
 
         JButton button2 = newUIComp.newButton("Descifrar","/Assets/UnKey.png");
-        button2.addActionListener(e -> {Decrypt(Prime1,Prime2,N,Message,S,DecryptMessage, Z2, phiLabel, phiLabel2);});
+        button2.addActionListener(e -> {Decrypt(Prime1,Prime2,N,Message,S,DecryptMessage, Z2, phiLabel, phiLabel2, button);});
         gbc.gridx=1;
         add(button2, gbc);
 
@@ -137,9 +137,6 @@ public class RSAPanel extends JPanel {
         add(button4, gbc);
 
         //Developing Default fields remove when finished
-        N.setText("29");
-        DecryptMessage.setText("113");
-        Z2.setText("713");
     }
     private void Encrypt(JTextField Prime1, JTextField Prime2, JTextField N, JTextField Message, JTextField S, JTextField DecryptMessage, JTextField Z2, JLabel phiLabel, JLabel phiLabel2){
         Cipher.clear();
@@ -161,10 +158,11 @@ public class RSAPanel extends JPanel {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    private void Decrypt(JTextField Prime1, JTextField Prime2, JTextField N, JTextField Message, JTextField S, JTextField DecryptMessage, JTextField Z2, JLabel phiLabel, JLabel phiLabel2){
+    private void Decrypt(JTextField Prime1, JTextField Prime2, JTextField N, JTextField Message, JTextField S, JTextField DecryptMessage, JTextField Z2, JLabel phiLabel, JLabel phiLabel2, JButton button){
        Thread thread = new Thread(new Runnable() {
            @Override
            public void run() {
+               button.setEnabled(false);
                Cipher.clear();
                boolean isPrivateKey=true;
                try{
@@ -192,6 +190,7 @@ public class RSAPanel extends JPanel {
                }catch (Exception e){
                    JOptionPane.showMessageDialog(null, e.getMessage());
                }
+               button.setEnabled(true);
            }
        });
        thread.start();

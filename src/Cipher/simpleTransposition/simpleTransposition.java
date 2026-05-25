@@ -114,7 +114,7 @@ public class simpleTransposition {
     }
     // Again, WTH is this?
     public String deCrypt(String cipherText, String key){
-
+        key=reformatKey(key);
         int columnas = key.length();
         int filas = cipherText.length() / columnas;
 
@@ -126,7 +126,8 @@ public class simpleTransposition {
             orden[i] = i;
         }
 
-        Arrays.sort(orden, (a,b) -> Character.compare(key.charAt(a), key.charAt(b)));
+        String finalKey = key;
+        Arrays.sort(orden, (a, b) -> Character.compare(finalKey.charAt(a), finalKey.charAt(b)));
 
         int pos = 0;
 

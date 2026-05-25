@@ -3,6 +3,12 @@ import javax.swing.*;
 import AssetsHandler.iconScaller;
 import java.awt.*;
 import Cipher.EndToEnd.EndToEndPanel;
+import Cipher.HelpPanels.EndToEndHelp.EndToEndHelp;
+import Cipher.HelpPanels.HelpCesar.HelpCesar;
+import Cipher.HelpPanels.PlayFairHelp.PlayFairHelp;
+import Cipher.HelpPanels.RSAHelp.RSAHelp;
+import Cipher.HelpPanels.SimpleTrans.HelpSimpleTrans;
+import Cipher.HelpPanels.VernamHelp.VernamHelp;
 import Cipher.RSA.RSAPanel;
 import Cipher.Vernam.VernamPanel;
 import Cipher.cesarCipher.cesarPanel;
@@ -105,6 +111,7 @@ public class Menu extends JFrame {
         centro.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JButton credits= newUIComp.newButton("Info", "/Assets/Code.png");
+        credits.addActionListener(e -> getDialog().setVisible(true));
         credits.setAlignmentX(Component.CENTER_ALIGNMENT);
         credits.setMaximumSize(new Dimension(300, 40));
         centro.add(credits);
@@ -136,28 +143,40 @@ public class Menu extends JFrame {
         gbc.gridwidth=1;
 
         JButton helpTrans= newUIComp.newButton("", "/Assets/Spin.png");
+        helpTrans.setToolTipText("Ayuda Cifrado de Transposición simple");
+        helpTrans.addActionListener(e -> cardLayout.show(centroCard,"simpleTransHelp"));
         gbc.gridy=1;
         lowerPanel.add(helpTrans, gbc);
 
         JButton helpCesar= newUIComp.newButton("", "/Assets/Cesar.png");
+        helpCesar.setToolTipText("Ayuda Cifrado de Cesar");
+        helpCesar.addActionListener(e -> cardLayout.show(centroCard,"cesarHelp"));
         gbc.gridx=1;
         lowerPanel.add(helpCesar, gbc);
 
         JButton helpPlay= newUIComp.newButton("", "/Assets/PlayFair.png");
+        helpPlay.setToolTipText("Ayuda Cifrado de PlayFair");
+        helpPlay.addActionListener(e -> cardLayout.show(centroCard,"playFairHelp"));
         gbc.gridx=2;
         lowerPanel.add(helpPlay, gbc);
 
         gbc.gridx=0;
 
         JButton helpVernam= newUIComp.newButton("", "/Assets/Vernam.png");
+        helpVernam.setToolTipText("Ayuda Cifrado de Vernam");
+        helpVernam.addActionListener(e -> cardLayout.show(centroCard,"vernamHelp"));
         gbc.gridy=2;
         lowerPanel.add(helpVernam, gbc);
 
         JButton helpEndtoend= newUIComp.newButton("", "/Assets/Afin.png");
+        helpEndtoend.setToolTipText("Ayuda Cifrado Afin");
+        helpEndtoend.addActionListener(e -> cardLayout.show(centroCard,"endToEndHelp"));
         gbc.gridx=1;
         lowerPanel.add(helpEndtoend, gbc);
 
         JButton helpRSA= newUIComp.newButton("", "/Assets/RSA.png");
+        helpRSA.setToolTipText("Ayuda Algoritmo RSA");
+        helpRSA.addActionListener(e -> cardLayout.show(centroCard,"RSAhelp"));
         gbc.gridx=2;
         lowerPanel.add(helpRSA, gbc);
 
@@ -170,6 +189,22 @@ public class Menu extends JFrame {
         JPanel vernamPanel= new VernamPanel(cardLayout);
         JPanel endtoendPanel= new EndToEndPanel(cardLayout);
         JPanel rSAPanel= new RSAPanel(cardLayout);
+
+        //Help Panels
+
+        JPanel RSAhelp= new RSAHelp(cardLayout,"RSA");
+        JPanel simpleTransHelp= new HelpSimpleTrans(cardLayout, "Simple Transposition");
+        JPanel playFairHelp = new PlayFairHelp(cardLayout, "PlayFair");
+        JPanel cesarHelp= new HelpCesar(cardLayout, "Cesar");
+        JPanel vernamHelp= new VernamHelp(cardLayout, "Vernam");
+        JPanel endToEndHelp= new EndToEndHelp(cardLayout, "EndToEnd");
+
+        centroCard.add(RSAhelp, "RSAhelp");
+        centroCard.add(simpleTransHelp, "simpleTransHelp");
+        centroCard.add(playFairHelp, "playFairHelp");
+        centroCard.add(cesarHelp, "cesarHelp");
+        centroCard.add(vernamHelp, "vernamHelp");
+        centroCard.add(endToEndHelp, "endToEndHelp");
 
         centroCard.add(cesarPanel, "cesarPanel");
         centroCard.add(transPanel, "transPanel");
@@ -185,8 +220,71 @@ public class Menu extends JFrame {
         setVisible(true);
     }
     private void vernamLaunch(JPanel centroCard){
-        if(JOptionPane.showConfirmDialog(this.getParent(),"Advertencia: El cifrado de Vernam funciona por medio del código de Baudot y encripta en Binario a diferencia del tradicional que funciona en ASCII y encripta en texto, debido a la limitación de caracteres del codigo de Baudot el cifrado sera mostrado en binario")==0){
+        if(JOptionPane.showConfirmDialog(this.getParent(),"Advertencia: El cifrado de Vernam funciona por medio del código de Baudot y encripta en \n Binario a diferencia del tradicional que funciona en ASCII y encripta en texto, debido a la limitación \n de caracteres del codigo de Baudot el cifrado sera mostrado en binario")==0){
             cardLayout.show(centroCard,"vernamPanel");
         }
+    }
+    private JDialog getDialog(){
+        JDialog dialog = new JDialog(this);
+        dialog.setModal(true);
+        dialog.setUndecorated(false);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setSize(new Dimension(450, 500));
+        dialog.setLocationRelativeTo(this);
+        dialog.setLayout(new BorderLayout());
+        dialog.setResizable(false);
+
+        JPanel panelSuperior = new JPanel();
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel label= new JLabel("Créditos");
+        label.setFont(Fonts.SourceSansPro18);
+        label.setForeground(Color.BLACK);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel panelCentral = new JPanel();
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel label1= new JLabel("Desarrollador: David Alejandro Garcia Mongui");
+        label1.setFont(Fonts.SourceSansPro18);
+        label1.setForeground(Color.BLACK);
+        label1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel label2= new JLabel("Institución: Universidad Industrial de Santander");
+        label2.setFont(Fonts.SourceSansPro18);
+        label2.setForeground(Color.BLACK);
+        label2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel label3= new JLabel("2026");
+        label3.setFont(Fonts.SourceSansPro18);
+        label3.setForeground(Color.BLACK);
+        label3.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton button= newUIComp.newButton("Salir", "/Assets/Exit.png");
+        button.addActionListener(e -> dialog.dispose());
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        ImageIcon logo= iconScaller.sprite("/Assets/UIS.png");
+
+        JLabel label4= new JLabel(logo);
+        label4.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        panelSuperior.add(label);
+        panelCentral.add(label1);
+        panelCentral.add(label2);
+        panelCentral.add(label3);
+        panelCentral.add(Box.createRigidArea(new Dimension(0, 20)));
+        panelCentral.add(label4);
+        panelCentral.add(Box.createRigidArea(new Dimension(0, 20)));
+        panelCentral.add(button);
+
+        panelCentral.setBackground(Color.WHITE);
+        panelSuperior.setBackground(Color.WHITE);
+
+        dialog.add(panelSuperior, BorderLayout.NORTH);
+        dialog.add(panelCentral, BorderLayout.CENTER);
+        return dialog;
     }
 }
